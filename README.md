@@ -1,51 +1,193 @@
 # Lab 5: Static Code Analysis — Telecom Tower Maintenance Tracker
 
-**Your file:** `tower_maintenance.py`
+## Overview
 
-Follow the lab handout for the full instructions.
+This project is part of Lab 5: Static Code Analysis. It focuses on improving Python code quality, security, readability, and maintainability using Pylint, Bandit, and Flake8.
 
-## About the program
+The project contains a Python-based telecom tower maintenance tracker that stores tower details, records servicing, identifies overdue towers, and evaluates tower fault risk.
 
-A maintenance tracker for telecom towers. It logs towers and their faults, records servicing, lists overdue sites and rates the risk of each tower.
+## Program Features
 
-The code works, but only just. It has quality, style and security problems of the kind Pylint, Flake8 and Bandit are built to find.
+- Add telecom towers with their site names, last service years, and fault counts.
+- Record tower servicing and reset the fault count.
+- Identify towers overdue for maintenance by two or more years.
+- Determine the risk level of a tower based on its fault count.
+- Retrieve a snapshot of the tower records.
 
-## What to do
+The program uses an in-memory SQLite database, so its records are available during the program's execution and are not permanently stored in a database file.
 
-1. **Run it first** and read the output carefully:
-   ```bash
-   python tower_maintenance.py
-   ```
-   It runs a short demonstration and may create a small output file in the current folder, so run it from a folder you don't mind adding files to.
+## Technologies Used
 
-2. **Install the tools:**
-   ```bash
-   pip install pylint bandit flake8
-   ```
+- Python 3
+- SQLite (`sqlite3`)
+- Pylint — code quality analysis
+- Bandit — security analysis
+- Flake8 — code style and formatting analysis
 
-3. **Run the analysis** and save the reports:
-   ```bash
-   pylint tower_maintenance.py > pylint_report.txt
-   bandit -r tower_maintenance.py > bandit_report.txt
-   flake8 tower_maintenance.py > flake8_report.txt
-   ```
+## Project Structure
 
-4. **Document the issues** in `issues.md` using this table (at least 4 rows, high and medium severity first):
+```text
+L5_25_tower_maintenance/
+├── tower_maintenance.py
+├── issues.md
+├── reflection.md
+├── pylint_report_before.txt
+├── pylint_report_after.txt
+├── bandit_report_before.txt
+├── bandit_report_after.txt
+├── flake8_report_before.txt
+└── flake8_report_after.txt
+```
 
-   | Issue | Type | Line(s) | Description | Fix Approach |
-   |-------|------|---------|-------------|--------------|
-   | ... | ... | ... | ... | ... |
+## Setup and Installation
 
-5. **Fix the code.** Fix at least 4 of the issues you documented, then rerun all three tools to confirm they are gone. Repeat until you are satisfied. The program should still do its job when you are done.
+### 1. Clone the repository
 
-6. **Reflect.** Answer the four reflection questions from the handout in `reflection.md`.
+```bash
+git clone https://github.com/vikhyathks-10/L5_25_tower_maintenance.git
+cd L5_25_tower_maintenance
+```
 
-## Deliverables
+### 2. Create a virtual environment
 
-1. `tower_maintenance.py`: your cleaned version, with at least 4 issues fixed.
-2. `issues.md`: the completed issue table.
-3. `reflection.md`: your answers to the reflection questions.
+```bash
+python -m venv venv
+```
 
-**Target:** aim for a Pylint score above 9.5 on your final file. A perfect 10.00/10 is very good.
+Activate it on Windows PowerShell:
 
-Be ready to explain the bugs you found and how you fixed them. You may be called on to present.
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+On Linux or macOS:
+
+```bash
+source venv/bin/activate
+```
+
+### 3. Install the static analysis tools
+
+```bash
+python -m pip install pylint bandit flake8
+```
+
+## Run the Program
+
+Execute the Python script:
+
+```bash
+python tower_maintenance.py
+```
+
+The program runs a sample maintenance scenario and prints the overdue sites, risk level, total number of towers, and service count.
+
+Expected output:
+
+```text
+['Ridge-A'] high 2 1
+```
+
+## Static Code Analysis
+
+The program was analyzed using three static analysis tools.
+
+### Pylint
+
+Pylint checks code quality, naming conventions, documentation, and common programming mistakes.
+
+Run the analysis:
+
+```bash
+pylint tower_maintenance.py
+```
+
+Save the report:
+
+```powershell
+pylint tower_maintenance.py > pylint_report.txt 2>&1
+```
+
+### Bandit
+
+Bandit identifies potentially unsafe coding patterns and common security vulnerabilities.
+
+Run the analysis:
+
+```bash
+bandit -r tower_maintenance.py
+```
+
+Save the report:
+
+```powershell
+bandit -r tower_maintenance.py -f txt -o bandit_report.txt
+```
+
+### Flake8
+
+Flake8 checks Python formatting, whitespace, line length, and PEP 8 style violations.
+
+Run the analysis:
+
+```bash
+flake8 tower_maintenance.py
+```
+
+Save the report:
+
+```powershell
+flake8 tower_maintenance.py > flake8_report.txt 2>&1
+```
+
+## Issues Identified and Fixed
+
+The original program contained code quality, security, reliability, and formatting issues. The following improvements were made:
+
+| Issue | Fix Applied |
+|---|---|
+| SQL injection risk | Replaced SQL string formatting with parameterized queries. |
+| Unsafe pickle usage | Removed unnecessary serialization and deserialization. |
+| Hardcoded password | Removed the unused password constant. |
+| Broad exception handling | Caught the specific `sqlite3.Error` exception. |
+| Missing tower validation | Handled nonexistent tower IDs safely in the risk calculation. |
+| Naming convention violations | Renamed functions using `snake_case`. |
+| Missing docstrings | Added documentation for the module and functions. |
+| Global counter | Replaced the global service counter with a local counter in `main()`. |
+| Long lines and formatting problems | Improved line wrapping, whitespace, and blank-line usage. |
+
+More detailed findings and their original line numbers are documented in `issues.md`.
+
+## Analysis Results
+
+The reported analysis results after the fixes were:
+
+| Tool | Before Fixes | After Fixes |
+|---|---|---|
+| Pylint | 5.14/10 | 10/10 |
+| Bandit | 4 findings | 0 findings |
+| Flake8 | 7 reported violations | No reported violations |
+
+The before-and-after reports are included in the repository for comparison.
+
+## Reflection
+
+The reflection questions and answers are provided in `reflection.md`. They cover the purpose of static code analysis, the issues identified, the roles of the three tools, and the lessons learned from improving the program.
+
+## Git Commits
+
+The work was recorded in three commits:
+
+1. `Fix code quality issues identified by Pylint`
+2. `Fix security issues identified by Bandit`
+3. `Fix formatting issues identified by Flake8`
+
+These commits document the code quality, security, and formatting stages of the lab work.
+
+## Learning Outcomes
+
+Through this lab, I learned how static analysis tools help identify potential security vulnerabilities, programming mistakes, and style violations without executing the source code. I also learned the importance of parameterized SQL queries, specific exception handling, consistent naming, documentation, and verification after making changes.
+
+## Repository
+
+GitHub: https://github.com/vikhyathks-10/L5_25_tower_maintenance
